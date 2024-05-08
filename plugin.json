@@ -1,0 +1,67 @@
+{
+  "id": "server_send_email_via_mailgun",
+  "uuid": "0af1f30b-26c1-4649-9f5f-e520327113ae",
+  "system": true,
+  "isServerPlugin": true,
+  "disabled": true,
+  "userSettings": [
+    {
+      "name": "apiKey",
+      "label": "Mailgun Sending API Key",
+      "description": "The API key for sending emails using Mailgun. Get your API key from Mailgun dashboard",
+      "type": "password",
+      "required": true
+    },
+    {
+      "name": "senderAddress",
+      "label": "Sender Address",
+      "description": "The email address of the sender",
+      "type": "string",
+      "placeholder": "tony@example.com"
+    },
+    {
+      "name": "senderName",
+      "label": "Sender Name",
+      "description": "The name of the sender",
+      "type": "string",
+      "placeholder": "Tony Stark"
+    }
+  ],
+  "emoji": "✉️",
+  "title": "Send Email with Mailgun",
+  "openaiSpec": {
+    "name": "server_send_email_via_mailgun",
+    "parameters": {
+      "type": "object",
+      "required": ["subject", "body"],
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "The subject of the email"
+        },
+        "body": {
+          "type": "string",
+          "description": "The body of the email in raw text format"
+        }
+      }
+    },
+    "description": "Send an email using the Mailgun API. The email will be sent to the recipient automatically."
+  },
+  "implementationType": "http",
+  "httpAction": {
+    "hasBody": true,
+    "hasHeaders": true,
+    "hasResultTransform": true,
+    "id": "93b450c4-6478-49e5-b38d-4e0ec888e7f2",
+    "method": "POST",
+    "name": "",
+    "requestBody": "{\n        \"model\": \"dall-e-3\",\n        \"prompt\": \"{prompt}\",\n        \"n\": 1,\n        \"size\": \"{resolution}\",\n        \"quality\": \"{quality}\",\n        \"response_format\": \"url\"\n    }",
+    "requestHeaders": "{\n\"Content-Type\": \"application/json\",\n\"Authorization\": \"Bearer {openaikey}\"\n}",
+    "resultTransform": {
+      "engine": "handlebars",
+      "templateString": "![{{data.[0].revised_prompt}}]({{data.[0].url}})\n\n_Note: Generated images will expire after 1 hour. Save them to your device if you wish to keep the images._"
+    },
+    "url": "https://api.openai.com/v1/images/generations"
+  },
+  "outputType": "render_markdown"
+}
